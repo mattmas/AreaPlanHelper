@@ -31,6 +31,9 @@
             this.components = new System.ComponentModel.Container();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.btnEdit = new System.Windows.Forms.Button();
+            this.cbConfigs = new System.Windows.Forms.ComboBox();
+            this.label5 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.btnCancel = new System.Windows.Forms.Button();
             this.btnNext = new System.Windows.Forms.Button();
@@ -49,9 +52,6 @@
             this.colCount = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colConfig = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.cbConfigs = new System.Windows.Forms.ComboBox();
-            this.label5 = new System.Windows.Forms.Label();
-            this.btnEdit = new System.Windows.Forms.Button();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
@@ -66,7 +66,7 @@
             this.tabControl1.Location = new System.Drawing.Point(0, 0);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(480, 363);
+            this.tabControl1.Size = new System.Drawing.Size(483, 368);
             this.tabControl1.TabIndex = 0;
             // 
             // tabPage1
@@ -84,10 +84,42 @@
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(472, 337);
+            this.tabPage1.Size = new System.Drawing.Size(475, 342);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "tabPage1";
             this.tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // btnEdit
+            // 
+            this.btnEdit.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnEdit.Location = new System.Drawing.Point(333, 233);
+            this.btnEdit.Name = "btnEdit";
+            this.btnEdit.Size = new System.Drawing.Size(75, 23);
+            this.btnEdit.TabIndex = 10;
+            this.btnEdit.Text = "Edit";
+            this.btnEdit.UseVisualStyleBackColor = true;
+            this.btnEdit.Click += new System.EventHandler(this.btnLoad_Click);
+            // 
+            // cbConfigs
+            // 
+            this.cbConfigs.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.cbConfigs.DisplayMember = "Name";
+            this.cbConfigs.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbConfigs.FormattingEnabled = true;
+            this.cbConfigs.Location = new System.Drawing.Point(27, 235);
+            this.cbConfigs.Name = "cbConfigs";
+            this.cbConfigs.Size = new System.Drawing.Size(288, 21);
+            this.cbConfigs.TabIndex = 9;
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(27, 209);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(135, 13);
+            this.label5.TabIndex = 8;
+            this.label5.Text = "Room Types Configuration:";
             // 
             // label3
             // 
@@ -102,7 +134,7 @@
             // btnCancel
             // 
             this.btnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnCancel.Location = new System.Drawing.Point(285, 276);
+            this.btnCancel.Location = new System.Drawing.Point(288, 281);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(75, 23);
             this.btnCancel.TabIndex = 6;
@@ -113,7 +145,7 @@
             // btnNext
             // 
             this.btnNext.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnNext.Location = new System.Drawing.Point(382, 276);
+            this.btnNext.Location = new System.Drawing.Point(385, 281);
             this.btnNext.Name = "btnNext";
             this.btnNext.Size = new System.Drawing.Size(75, 23);
             this.btnNext.TabIndex = 5;
@@ -129,7 +161,7 @@
             this.cbParameter.FormattingEnabled = true;
             this.cbParameter.Location = new System.Drawing.Point(27, 173);
             this.cbParameter.Name = "cbParameter";
-            this.cbParameter.Size = new System.Drawing.Size(285, 21);
+            this.cbParameter.Size = new System.Drawing.Size(288, 21);
             this.cbParameter.TabIndex = 3;
             // 
             // label2
@@ -150,7 +182,7 @@
             this.cbModel.FormattingEnabled = true;
             this.cbModel.Location = new System.Drawing.Point(27, 109);
             this.cbModel.Name = "cbModel";
-            this.cbModel.Size = new System.Drawing.Size(285, 21);
+            this.cbModel.Size = new System.Drawing.Size(288, 21);
             this.cbModel.TabIndex = 1;
             this.cbModel.SelectedIndexChanged += new System.EventHandler(this.onModelChange);
             // 
@@ -174,7 +206,7 @@
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(472, 307);
+            this.tabPage2.Size = new System.Drawing.Size(475, 342);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "tabPage2";
             this.tabPage2.UseVisualStyleBackColor = true;
@@ -183,9 +215,9 @@
             // 
             this.linkOpenSpots.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.linkOpenSpots.Location = new System.Drawing.Point(42, 209);
+            this.linkOpenSpots.Location = new System.Drawing.Point(42, 244);
             this.linkOpenSpots.Name = "linkOpenSpots";
-            this.linkOpenSpots.Size = new System.Drawing.Size(392, 29);
+            this.linkOpenSpots.Size = new System.Drawing.Size(395, 29);
             this.linkOpenSpots.TabIndex = 10;
             this.linkOpenSpots.TabStop = true;
             this.linkOpenSpots.Text = "Open Spots Note Here";
@@ -195,7 +227,7 @@
             // button3
             // 
             this.button3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.button3.Location = new System.Drawing.Point(25, 255);
+            this.button3.Location = new System.Drawing.Point(25, 290);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(75, 23);
             this.button3.TabIndex = 9;
@@ -206,7 +238,7 @@
             // button1
             // 
             this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.button1.Location = new System.Drawing.Point(252, 255);
+            this.button1.Location = new System.Drawing.Point(255, 290);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(75, 23);
             this.button1.TabIndex = 8;
@@ -217,7 +249,7 @@
             // btnCreate
             // 
             this.btnCreate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnCreate.Location = new System.Drawing.Point(359, 255);
+            this.btnCreate.Location = new System.Drawing.Point(362, 290);
             this.btnCreate.Name = "btnCreate";
             this.btnCreate.Size = new System.Drawing.Size(75, 23);
             this.btnCreate.TabIndex = 7;
@@ -228,7 +260,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(22, 28);
+            this.label4.Location = new System.Drawing.Point(22, 22);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(178, 13);
             this.label4.TabIndex = 1;
@@ -249,7 +281,7 @@
             this.dataGridView1.Location = new System.Drawing.Point(25, 44);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.ReadOnly = true;
-            this.dataGridView1.Size = new System.Drawing.Size(409, 158);
+            this.dataGridView1.Size = new System.Drawing.Size(412, 193);
             this.dataGridView1.TabIndex = 0;
             // 
             // colType
@@ -273,46 +305,14 @@
             this.colConfig.Name = "colConfig";
             this.colConfig.ReadOnly = true;
             // 
-            // cbConfigs
-            // 
-            this.cbConfigs.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.cbConfigs.DisplayMember = "Name";
-            this.cbConfigs.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cbConfigs.FormattingEnabled = true;
-            this.cbConfigs.Location = new System.Drawing.Point(27, 235);
-            this.cbConfigs.Name = "cbConfigs";
-            this.cbConfigs.Size = new System.Drawing.Size(285, 21);
-            this.cbConfigs.TabIndex = 9;
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(27, 209);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(135, 13);
-            this.label5.TabIndex = 8;
-            this.label5.Text = "Room Types Configuration:";
-            // 
-            // btnEdit
-            // 
-            this.btnEdit.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnEdit.Location = new System.Drawing.Point(331, 233);
-            this.btnEdit.Name = "btnEdit";
-            this.btnEdit.Size = new System.Drawing.Size(75, 23);
-            this.btnEdit.TabIndex = 10;
-            this.btnEdit.Text = "Edit";
-            this.btnEdit.UseVisualStyleBackColor = true;
-            this.btnEdit.Click += new System.EventHandler(this.btnLoad_Click);
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(480, 363);
+            this.ClientSize = new System.Drawing.Size(483, 368);
             this.Controls.Add(this.tabControl1);
             this.Name = "MainForm";
-            this.Text = "Area Plan Helper <version> by BeyondAEC 2018 Team";
+            this.Text = "Area Plan Helper <version> by BeyondAEC 2018 Team AreaShooter";
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.tabPage1.PerformLayout();

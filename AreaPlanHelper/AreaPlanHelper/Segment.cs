@@ -21,8 +21,13 @@ namespace AreaShooter
         public double Thickness { get; set; }
         public ElementId Element { get; set; }
         public Boolean Draw { get; set; }
+        public ModelCurve ModelCurve { get; set; }
 
         public bool IsExterior { get; set; }
+
+        public int Counter { get; private set; }
+
+        public static int _Count = 0;
         #endregion
 
         #region Constructor
@@ -32,6 +37,8 @@ namespace AreaShooter
             WallKind = WallKind.Unknown;
             Draw = true;
             IsExterior = false;
+            _Count++;
+            Counter = _Count;
         }
         #endregion
     }

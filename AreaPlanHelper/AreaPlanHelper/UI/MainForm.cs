@@ -81,6 +81,21 @@ namespace AreaShooter.UI
 
         private void btnNext_Click(object sender, EventArgs e)
         {
+            if (cbModel.SelectedItem==null)
+            {
+                MessageBox.Show("Please select a model!");
+                return;
+            }
+            if (cbParameter.SelectedItem == null)
+            {
+                MessageBox.Show("Please select a room types parameter");
+                return;
+            }
+            if (cbConfigs.SelectedItem == null)
+            {
+                MessageBox.Show("Please select a room type configuration file!");
+                return;
+            }
 
             if (retrieveAndRender())
             {

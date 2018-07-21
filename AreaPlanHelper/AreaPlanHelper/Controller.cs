@@ -84,6 +84,16 @@ namespace AreaShooter
             }
             if (matchingPhase == null) throw new ApplicationException("There is no matching Phase " + phaseName + " in the room model?");
 
+            // need an open transaction for this!
+            if (doc.IsLinked) return -1;
+
+            Transaction t = null;
+            if (doc.IsModifiable == false)
+            {
+                t = new Transaction(doc, "GetPlanTopo");
+                t.Start();
+            }
+
             var pts = doc.get_PlanTopologies(matchingPhase);
 
             int missing = 0;
@@ -99,6 +109,7 @@ namespace AreaShooter
                 }
             }
 
+            if (t != null) t.RollBack();
             return missing;
 
         }
@@ -187,13 +198,22 @@ namespace AreaShooter
         {
             var sp = CurrentDoc.ActiveView.SketchPlane;
 
+            List<Tuple<XYZ, ModelCurve>> alreadyCreated = new List<Tuple<XYZ, ModelCurve>>();
+
             foreach( var room in rooms )
             {
                 foreach( var segment in room.Boundaries )
                 {
                     if (segment.Draw)
                     {
-                        CurrentDoc.Create.NewAreaBoundaryLine(sp, segment.Curve, CurrentDoc.ActiveView as ViewPlan);
+                        if (isAlreadyCreated(segment, alreadyCreated) == false)
+                        {
+
+                           var mc = CurrentDoc.Create.NewAreaBoundaryLine(sp, segment.Curve, CurrentDoc.ActiveView as ViewPlan);
+                            segment.ModelCurve = mc;
+                            alreadyCreated.Add(new Tuple<XYZ, ModelCurve>(segment.Curve.Evaluate(0.5, true), mc));
+                        }
+                        
                     }
                 }
 
@@ -201,8 +221,109 @@ namespace AreaShooter
                 CurrentDoc.Create.NewArea(CurrentDoc.ActiveView as ViewPlan, new UV(room.Location.X, room.Location.Y));
                 a.Name = room.Name;
                 a.Number = room.Number;
+
+                // does the parameter exist?
+                Parameter aCat = a.GetParameters(TypeParam).FirstOrDefault();
+
+                if (aCat == null)
+                {
+                    // add the parameter to the model...
+                    addParameterToAreas();
+
+                    aCat = a.GetParameters(TypeParam).FirstOrDefault();
+                }
+
+                if (aCat != null)
+                {
+                    aCat.Set(room.RoomType);
+                }
                 
             }
+        }
+
+        private void addParameterToAreas()
+        {
+
+            try
+            {
+                CategorySet set = new CategorySet();
+                Category area = CurrentDoc.Settings.Categories.get_Item(BuiltInCategory.OST_Areas);
+                set.Insert(area);
+                var binding = CurrentDoc.Application.Create.NewInstanceBinding(set);
+
+                if (String.IsNullOrEmpty(CurrentDoc.Application.SharedParametersFilename) || (System.IO.File.Exists(CurrentDoc.Application.SharedParametersFilename) == false))
+                {
+                    // make our own file.
+                    string file = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "RevitSharedParameters.txt");
+                    CurrentDoc.Application.SharedParametersFilename = file;
+                    System.IO.File.WriteAllText(file, "");
+                    
+                }
+                DefinitionFile defFile = CurrentDoc.Application.OpenSharedParameterFile();
+
+                var group = defFile.Groups.get_Item("AreaRoomTypes");
+                if (group == null) group = defFile.Groups.Create("AreaRoomTypes");
+
+                ExternalDefinitionCreationOptions opts = new ExternalDefinitionCreationOptions(TypeParam, ParameterType.Text);
+                Definition def = group.Definitions.Create(opts);
+                CurrentDoc.ParameterBindings.Insert(def, binding);
+            }
+            catch (Exception ex)
+            {
+                log("Tried to add the " + TypeParam + " parameter to Areas, but failed! " + ex.GetType().Name + ": " + ex.Message);
+            }
+            
+        }
+
+        private bool isAlreadyCreated(Segment seg, IList<Tuple<XYZ,ModelCurve>> already)
+        {
+            double midTolerance = 0.5 / 12.0;
+            double endTolerance = 1.0 / 12.0;
+            double endOffsetTolerance = 2.0 / 12.0; 
+
+            XYZ mid = seg.Curve.Evaluate(0.5, true);
+            Line segLine = seg.Curve as Line;
+            if (segLine == null) return false;
+
+            foreach( var item in already )
+            {
+                Curve crv = (item.Item2.GeometryCurve);
+                if ((crv is Line) == false) continue;
+
+                Line ln = crv as Line;
+                IntersectionResult res = ln.Project(mid);
+
+                if (res.Distance <= endTolerance)
+                {
+                    // it is a close projection.
+
+                    // check angle
+                    double angle = ln.Direction.AngleTo(segLine.Direction);
+                    if ((angle<0.01)||(angle>Math.PI*0.95))
+                    {
+                        // collinear
+                    }
+                    else
+                    {
+                        continue;
+                    }
+                    // now we need to look at how close the endpoints are
+                    XYZ end1 = segLine.GetEndPoint(0);
+                    XYZ end2 = segLine.GetEndPoint(1);
+
+                    IntersectionResult res1 = ln.Project(end1);
+                    IntersectionResult res2 = ln.Project(end2);
+
+                    if ((res1.Distance <= endOffsetTolerance) && (res2.Distance < endOffsetTolerance))
+                    {
+                        return true;
+                    }
+                }
+
+             
+            }
+
+            return false;
         }
         private RoomObject buildRoom(Autodesk.Revit.DB.Architecture.Room r)
         {
@@ -421,7 +542,8 @@ namespace AreaShooter
                 }
 
 
-                GeometryHelper.DrawLine(origin, testPoint1);
+                // Turn on for debugging line sides from rooms.
+                //GeometryHelper.DrawLine(origin, testPoint1);
 
                 if (opposite != null)
                 {
