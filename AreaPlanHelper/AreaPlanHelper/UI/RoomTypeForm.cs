@@ -32,6 +32,7 @@ namespace AreaPlanHelper.UI
 
         private void btnLoad_Click(object sender, EventArgs e)
         {
+            openFileDialog1.InitialDirectory = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
             if (openFileDialog1.ShowDialog(this) == DialogResult.OK)
             {
                 try
@@ -50,6 +51,7 @@ namespace AreaPlanHelper.UI
         {
             try
             {
+                saveFileDialog1.InitialDirectory = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
                 if (saveFileDialog1.ShowDialog(this) == DialogResult.OK)
                 {
                     Configuration.Save(saveFileDialog1.FileName);

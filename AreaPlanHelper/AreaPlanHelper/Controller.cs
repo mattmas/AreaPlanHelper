@@ -277,7 +277,7 @@ namespace AreaShooter
 
         private bool isAlreadyCreated(Segment seg, IList<Tuple<XYZ,ModelCurve>> already)
         {
-            double midTolerance = 0.5 / 12.0;
+            //double midTolerance = 0.5 / 12.0;
             double endTolerance = 1.0 / 12.0;
             double endOffsetTolerance = 2.0 / 12.0; 
 

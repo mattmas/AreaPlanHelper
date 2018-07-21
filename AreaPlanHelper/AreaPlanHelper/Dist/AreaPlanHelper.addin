@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RevitAddIns>
+
+  <AddIn Type="Application">
+    <Name>AreaPlanHelper</Name>
+    <Assembly>.\AreaPlanHelper\AreaPlanHelper.dll</Assembly>
+    <AddInId>b3541599-5529-4cfe-a977-00ce3dd86b7a</AddInId>
+    <FullClassName>AreaPlanHelper.ExternalApp</FullClassName>
+    <VendorId>HACK</VendorId>
+    <VendorDescription>Team AreaShooter, BeyondAEC Hackathon, 7/2018</VendorDescription>
+  </AddIn>
+
+</RevitAddIns>

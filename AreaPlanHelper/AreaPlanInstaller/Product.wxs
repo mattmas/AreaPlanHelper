@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+  <Product Id="*" Name="AreaPlanHelper" Language="1033" Version="1.0.0.0" Manufacturer="Team AreaShooter" UpgradeCode="b5d9255d-3d2d-447b-9bac-25647032d9c2">
+    <Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
+
+    <MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
+    <MediaTemplate />
+
+    <Feature Id="Revit2019Install" Title="Revit 2019" Level="1">
+      <ComponentRef Id="Addin2019" />
+      <ComponentRef Id="AreaPlanHelper2019" />
+
+    </Feature>
+    <Feature Id="Revit2018Install" Title="Revit 2018" Level="1">
+      <ComponentRef Id="Addin2018" />
+      <ComponentRef Id="AreaPlanHelper2018" />
+
+    </Feature>
+    <Feature Id="Revit2017Install" Title="Revit 2017" Level="1">
+      <ComponentRef Id="Addin2017" />
+      <ComponentRef Id="AreaPlanHelper2017" />
+  
+    </Feature>
+
+  </Product>
+
+
+    <!-- Directory Structure for install -->
+    <Fragment>
+      <Directory Id="TARGETDIR" Name="SourceDir">
+        <Directory Id="CommonAppDataFolder" Name="ProgramData">
+          <Directory Id="AUTODESKFOLDER"  Name="Autodesk">
+            <Directory Id="REVITFOLDER" Name="Revit" >
+              <Directory Id="ADDINSFOLDER" Name="Addins">
+
+                <Directory Id="ADDINS2019" Name="2019">
+                  <Directory Id="BUNDLEFOLDER2019" Name="AreaPlanHelper" />
+
+
+                </Directory>
+
+                <Directory Id="ADDINS2018" Name="2018">
+                  <Directory Id="BUNDLEFOLDER2018" Name="AreaPlanHelper" />
+
+
+                </Directory>
+
+                <Directory Id="ADDINS2017" Name="2017">
+                  <Directory Id="BUNDLEFOLDER2017" Name="AreaPlanHelper"/>
+
+                </Directory>
+
+              </Directory>
+            </Directory>
+          </Directory>
+        </Directory>
+      </Directory>
+  </Fragment>
+
+  <Fragment>
+  <!-- 2019 -->
+  <DirectoryRef Id="ADDINS2019">
+    <Component Id="Addin2019" Guid="{1468AAA7-4D76-4E32-9D6C-54A658D1BCE6}" DiskId="1">
+      <CreateFolder/>
+      <File Id="AreaPlanHelper.addin2019" Name="AreaPlanHelper.addin" Source="$(var.ProjectDir)\..\AreaPlanHelper\Dist\AreaPlanHelper.addin" Checksum="no"/>
+    </Component>
+  </DirectoryRef>
+
+    <DirectoryRef Id="BUNDLEFOLDER2019">
+      <Component Id="AreaPlanHelper2019" Guid="{C2346827-E31C-4E04-894E-23184D48BA3F}" DiskId="1">
+        <CreateFolder/>
+        <RemoveFolder Id="RemoveBundle2019" On="uninstall"/>
+        <File Id="AreaPlanHelper.dll2019" Name="AreaPlanHelper.dll" Source="$(var.ProjectDir)\..\AreaPlanHelper\bin\Release19\AreaPlanHelper.dll" Checksum="no"/>
+        <File Id="BOMA2019.rts" Name="BOMA.rts" Source="$(var.ProjectDir)\..\AreaPlanHelper\Dist\BOMA.rts" Checksum="no"/>
+      </Component>
+    </DirectoryRef>
+
+    <!-- 2018 -->
+    <DirectoryRef Id="ADDINS2018">
+      <Component Id="Addin2018" Guid="{1468BE33-4176-4332-966C-54A658D1BCE6}" DiskId="1">
+        <CreateFolder/>
+        <File Id="AreaPlanHelper.addin2018" Name="AreaPlanHelper.addin" Source="$(var.ProjectDir)\..\AreaPlanHelper\Dist\AreaPlanHelper.addin" Checksum="no"/>
+      </Component>
+    </DirectoryRef>
+
+    <DirectoryRef Id="BUNDLEFOLDER2018">
+      <Component Id="AreaPlanHelper2018" Guid="{C2E26227-E42E-4F14-894E-23184D48BA3F}" DiskId="1">
+        <CreateFolder/>
+        <RemoveFolder Id="RemoveBundle2018" On="uninstall"/>
+        <File Id="AreaPlanHelper.dll2018" Name="AreaPlanHelper.dll" Source="$(var.ProjectDir)\..\AreaPlanHelper\bin\Release18\AreaPlanHelper.dll" Checksum="no"/>
+        <File Id="BOMA2018.rts" Name="BOMA.rts" Source="$(var.ProjectDir)\..\AreaPlanHelper\Dist\BOMA.rts" Checksum="no"/>
+      </Component>
+    </DirectoryRef>
+
+    <!-- 2017 -->
+    <DirectoryRef Id="ADDINS2017">
+      <Component Id="Addin2017" Guid="{14681A66-4E76-4EE2-966C-54A658D1BCE6}" DiskId="1">
+        <CreateFolder/>
+        <File Id="AreaPlanHelper.addin2017" Name="AreaPlanHelper.addin" Source="$(var.ProjectDir)\..\AreaPlanHelper\Dist\AreaPlanHelper.addin" Checksum="no"/>
+        
+      </Component>
+    </DirectoryRef>
+
+    <DirectoryRef Id="BUNDLEFOLDER2017">
+      <Component Id="AreaPlanHelper2017" Guid="{C2E26227-E12F-4E24-894E-23184D48BA3F}" DiskId="1">
+        <CreateFolder/>
+        <RemoveFolder Id="RemoveBundle2017" On="uninstall"/>
+        <File Id="AreaPlanHelper.dll2017" Name="AreaPlanHelper.dll" Source="$(var.ProjectDir)..\AreaPlanHelper\bin\Release17\AreaPlanHelper.dll" Checksum="no"/>
+        <File Id="BOMA2017.rts" Name="BOMA.rts" Source="$(var.ProjectDir)\..\AreaPlanHelper\Dist\BOMA.rts" Checksum="no"/>
+      </Component>
+    </DirectoryRef>
+    
+    </Fragment>
+  
+  
+</Wix>

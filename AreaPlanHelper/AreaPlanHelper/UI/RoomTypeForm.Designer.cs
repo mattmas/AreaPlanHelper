@@ -32,10 +32,10 @@
             this.label2 = new System.Windows.Forms.Label();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
-            this.btnOK = new System.Windows.Forms.Button();
-            this.btnCancel = new System.Windows.Forms.Button();
             this.colRoomType = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colPriority = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.btnOK = new System.Windows.Forms.Button();
+            this.btnCancel = new System.Windows.Forms.Button();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.btnSaveAs = new System.Windows.Forms.Button();
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
@@ -84,6 +84,22 @@
             this.dataGridView1.Size = new System.Drawing.Size(280, 150);
             this.dataGridView1.TabIndex = 3;
             // 
+            // colRoomType
+            // 
+            this.colRoomType.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.colRoomType.DataPropertyName = "TypeName";
+            this.colRoomType.HeaderText = "Room Type";
+            this.colRoomType.Name = "colRoomType";
+            this.colRoomType.ToolTipText = "The Room Type name for grouping";
+            // 
+            // colPriority
+            // 
+            this.colPriority.DataPropertyName = "Score";
+            this.colPriority.HeaderText = "Priority";
+            this.colPriority.Name = "colPriority";
+            this.colPriority.ToolTipText = "The relative priority score when considering whether boundaries should be moved. " +
+    "The boundary will be moved towards the room with the higher score.";
+            // 
             // btnOK
             // 
             this.btnOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
@@ -106,22 +122,6 @@
             this.btnCancel.Text = "&Cancel";
             this.btnCancel.UseVisualStyleBackColor = true;
             // 
-            // colRoomType
-            // 
-            this.colRoomType.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.colRoomType.DataPropertyName = "TypeName";
-            this.colRoomType.HeaderText = "Room Type";
-            this.colRoomType.Name = "colRoomType";
-            this.colRoomType.ToolTipText = "The Room Type name for grouping";
-            // 
-            // colPriority
-            // 
-            this.colPriority.DataPropertyName = "Score";
-            this.colPriority.HeaderText = "Priority";
-            this.colPriority.Name = "colPriority";
-            this.colPriority.ToolTipText = "The relative priority score when considering whether boundaries should be moved. " +
-    "The boundary will be moved towards the room with the higher score.";
-            // 
             // openFileDialog1
             // 
             this.openFileDialog1.FileName = "openFileDialog1";
@@ -140,7 +140,7 @@
             // 
             // saveFileDialog1
             // 
-            this.saveFileDialog1.FileName = "(*.RTS) Room Types Config|*.rts|(*.*) All Files|*.*";
+            this.saveFileDialog1.Filter = "(*.RTS) Room Types Config|*.rts|(*.*) All Files|*.*";
             // 
             // btnLoad
             // 

@@ -58,7 +58,11 @@ namespace AreaShooter
             foreach (var col in columns) ro.Boundaries.Remove(col);
 
             bool isCorridor = (ro.Name.ToUpper().Contains("CORR"));
-            
+            if (isCorridor)
+            {
+                ignoreRoom(ro);
+                return;
+            }
 
                 // go through the boundaries and offset.
             foreach ( var seg in ro.Boundaries )
