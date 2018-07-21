@@ -52,6 +52,7 @@
             this.colCount = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colConfig = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.btnMulti = new System.Windows.Forms.Button();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
@@ -71,6 +72,7 @@
             // 
             // tabPage1
             // 
+            this.tabPage1.Controls.Add(this.btnMulti);
             this.tabPage1.Controls.Add(this.btnEdit);
             this.tabPage1.Controls.Add(this.cbConfigs);
             this.tabPage1.Controls.Add(this.label5);
@@ -305,6 +307,17 @@
             this.colConfig.Name = "colConfig";
             this.colConfig.ReadOnly = true;
             // 
+            // btnMulti
+            // 
+            this.btnMulti.Location = new System.Drawing.Point(330, 109);
+            this.btnMulti.Name = "btnMulti";
+            this.btnMulti.Size = new System.Drawing.Size(33, 21);
+            this.btnMulti.TabIndex = 11;
+            this.btnMulti.Text = "...";
+            this.toolTip1.SetToolTip(this.btnMulti, "Select rooms from multiple linked models.");
+            this.btnMulti.UseVisualStyleBackColor = true;
+            this.btnMulti.Click += new System.EventHandler(this.btnMulti_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -348,5 +361,6 @@
         private System.Windows.Forms.ComboBox cbConfigs;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Button btnEdit;
+        private System.Windows.Forms.Button btnMulti;
     }
 }

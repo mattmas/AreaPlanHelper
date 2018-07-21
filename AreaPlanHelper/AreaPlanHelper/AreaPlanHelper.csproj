@@ -145,6 +145,12 @@
     <Compile Include="UI\MainForm.designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="UI\MultiSelModels.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\MultiSelModels.Designer.cs">
+      <DependentUpon>MultiSelModels.cs</DependentUpon>
+    </Compile>
     <Compile Include="UI\RoomTypeForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -155,6 +161,9 @@
   <ItemGroup>
     <EmbeddedResource Include="UI\MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\MultiSelModels.resx">
+      <DependentUpon>MultiSelModels.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UI\RoomTypeForm.resx">
       <DependentUpon>RoomTypeForm.cs</DependentUpon>

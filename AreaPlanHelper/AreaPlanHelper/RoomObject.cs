@@ -19,6 +19,8 @@ namespace AreaShooter
         public String RoomType { get; set; }
         public ElementId LevelId { get; set; }
 
+        // the document that the room comes from.
+        public Document Document { get; set; }
         #endregion
 
         #region constructor

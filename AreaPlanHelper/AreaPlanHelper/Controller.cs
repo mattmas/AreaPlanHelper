@@ -14,7 +14,7 @@ namespace AreaShooter
 
         #region Accessors
         public Document CurrentDoc { get; set; }
-        public Document RoomDoc { get; set; }
+        public List<Document> RoomDocs { get; set; }
         public bool SameModel { get; set; }
         public String TypeParam { get; private set; } 
         public Config Configuration { get; private set; }
@@ -22,12 +22,15 @@ namespace AreaShooter
         #endregion
 
         #region Constructors
-        public Controller(Document arch, Document current, string roomParam, Config c)
+        public Controller(List<Document> archDocs, Document current, string roomParam, Config c)
         {
             CurrentDoc = current;
-            RoomDoc = arch;
+            RoomDocs = archDocs;
 
-            SameModel = (CurrentDoc.Title == RoomDoc.Title);
+            SameModel = false;
+            foreach (var doc in RoomDocs) if (doc.Title == CurrentDoc.Title) SameModel = true;
+
+            
             TypeParam = roomParam;
             Configuration = c;
             
@@ -118,7 +121,7 @@ namespace AreaShooter
         {
             List<RoomObject> rooms = new List<RoomObject>();
 
-            var roomElems = getRoomsOnLevel(levelName, phaseName);
+            var roomElems = getRoomsOnAllDocLevels(RoomDocs, levelName, phaseName);
             if (roomElems.Count == 0) throw new ApplicationException("There are no rooms on level " + levelName + "/ phase " + phaseName + " in the room model?");
 
             _phaseName = phaseName; // store for future reference.
@@ -328,6 +331,7 @@ namespace AreaShooter
         private RoomObject buildRoom(Autodesk.Revit.DB.Architecture.Room r)
         {
             RoomObject ro = new RoomObject() { Id = r.Id, Name = r.Name, Number = r.Number, Location = (r.Location as LocationPoint).Point };
+            ro.Document = r.Document;
 
             Parameter p = r.GetParameters(TypeParam).FirstOrDefault();
             if (p != null)
@@ -358,28 +362,41 @@ namespace AreaShooter
             return ro;
         }
 
+        private IList<Autodesk.Revit.DB.Architecture.Room> getRoomsOnAllDocLevels(IList<Document> docs, string levelName, string phase)
+        {
+            IList<Autodesk.Revit.DB.Architecture.Room> allRooms = new List<Autodesk.Revit.DB.Architecture.Room>();
+
+            foreach( var doc in docs)
+            {
+                var rooms = getRoomsOnLevel(doc, levelName, phase);
+                foreach (var room in rooms) allRooms.Add(room);
+
+            }
+
+            return allRooms;
+        }
         /// <summary>
         /// get rooms on a given level/phase
         /// </summary>
         /// <param name="levelName"></param>
         /// <param name="phaseName"></param>
         /// <returns></returns>
-        private IList<Autodesk.Revit.DB.Architecture.Room> getRoomsOnLevel(string levelName, string phaseName)
+        private IList<Autodesk.Revit.DB.Architecture.Room> getRoomsOnLevel(Document doc, string levelName, string phaseName)
         {
             List<Autodesk.Revit.DB.Architecture.Room> rooms = new List<Autodesk.Revit.DB.Architecture.Room>();
-            FilteredElementCollector collLev = new FilteredElementCollector(RoomDoc);
+            FilteredElementCollector collLev = new FilteredElementCollector(doc);
             collLev.OfClass(typeof(Level));
 
             Level lev = collLev.Cast<Level>().FirstOrDefault(l => l.Name.ToUpper() == levelName.ToUpper());
 
             if (lev == null) throw new ApplicationException("There is no matching level name " + levelName + " in the room model?");
 
-            FilteredElementCollector collRoom = new FilteredElementCollector(RoomDoc);
+            FilteredElementCollector collRoom = new FilteredElementCollector(doc);
             collRoom.OfClass(typeof(SpatialElement));
 
             // see if there is a matching phase name
             Phase matchPhase = null;
-            foreach( Phase phase in RoomDoc.Phases)
+            foreach( Phase phase in doc.Phases)
             {
                 if (phase.Name.ToUpper() == phaseName.ToUpper()) matchPhase = phase; 
             }
@@ -400,7 +417,7 @@ namespace AreaShooter
                     if (room.LevelId != lev.Id)
                     {
                         // check if the room is actually on a lower level but expanding above the current level.
-                        Level roomLev = RoomDoc.GetElement(room.LevelId) as Level;
+                        Level roomLev = doc.GetElement(room.LevelId) as Level;
                         if (roomLev == null) continue;
                         if (roomLev.ProjectElevation > lev.ProjectElevation) continue;
 
@@ -430,7 +447,7 @@ namespace AreaShooter
         {
             // add all of the geometry info...
 
-            Autodesk.Revit.DB.Architecture.Room r = this.RoomDoc.GetElement(ro.Id) as Autodesk.Revit.DB.Architecture.Room;
+            Autodesk.Revit.DB.Architecture.Room r = ro.Document.GetElement(ro.Id) as Autodesk.Revit.DB.Architecture.Room;
 
             SpatialElementBoundaryOptions opts = new SpatialElementBoundaryOptions() { SpatialElementBoundaryLocation = SpatialElementBoundaryLocation.Center };
 
@@ -439,7 +456,7 @@ namespace AreaShooter
             {
                 
                 Segment seg = new Segment() { Parent = ro, Element = roomSeg.ElementId };
-                fetchSegmentElemInfo(roomSeg, refLevel, seg);
+                fetchSegmentElemInfo(ro, roomSeg, refLevel, seg);
                 ro.Boundaries.Add(seg);
                
             }
@@ -448,7 +465,7 @@ namespace AreaShooter
 
         }
 
-        private void fetchSegmentElemInfo(BoundarySegment seg, Level refLevel, Segment target)
+        private void fetchSegmentElemInfo(RoomObject obj, BoundarySegment seg, Level refLevel, Segment target)
         {
 
             Curve crv = seg.GetCurve();
@@ -456,7 +473,7 @@ namespace AreaShooter
             target.Length = crv.ApproximateLength;
             target.MidPoint = crv.Evaluate(0.5, true);
 
-            Element e = RoomDoc.GetElement(seg.ElementId);
+            Element e = obj.Document.GetElement(seg.ElementId);
             if (e is RevitLinkInstance)
             {
                 RevitLinkInstance inst = e as RevitLinkInstance;
@@ -512,33 +529,44 @@ namespace AreaShooter
                 testPoint1 = new XYZ(testPoint1.X, testPoint1.Y, refLevel.ProjectElevation + 1.0); // one foot off the floor, just for safety...
                 testPoint2 = new XYZ(testPoint2.X, testPoint2.Y, refLevel.ProjectElevation + 1.0);
 
+                List<Document> all = new List<Document>(RoomDocs);
+                all.Remove(ro.Document);
+                all.Insert(0, ro.Document);
 
-                var revitRoom1 = RoomDoc.GetRoomAtPoint(testPoint1, targetPhase);
-                var revitRoom2 = RoomDoc.GetRoomAtPoint(testPoint2, targetPhase);
-
+                // find the opposite room...
                 Autodesk.Revit.DB.Architecture.Room opposite = null;
-                if ((revitRoom1 != null) && (revitRoom2 != null))
+
+                foreach (Document testDoc in all)
                 {
-                    if ((revitRoom1.Id != ro.Id)) opposite = revitRoom1;
-                    if ((revitRoom2.Id != ro.Id))
+
+                    var revitRoom1 = testDoc.GetRoomAtPoint(testPoint1, targetPhase);
+                    var revitRoom2 = testDoc.GetRoomAtPoint(testPoint2, targetPhase);
+
+                    
+                    if ((revitRoom1 != null) && (revitRoom2 != null))
                     {
-                        opposite = revitRoom2;
-                        seg.OutsideRoomVector = normalDir.Negate();
-                        testPoint1 = testPoint2; // reset
+                        if ((revitRoom1.Id != ro.Id)) opposite = revitRoom1;
+                        if ((revitRoom2.Id != ro.Id))
+                        {
+                            opposite = revitRoom2;
+                            seg.OutsideRoomVector = normalDir.Negate();
+                            testPoint1 = testPoint2; // reset
+                        }
                     }
-                }
-                else
-                {
-                    if (revitRoom1 != null)
+                    else
                     {
-                        seg.OutsideRoomVector = normalDir.Negate();
-                        testPoint1 = testPoint2;
+                        if (revitRoom1 != null)
+                        {
+                            seg.OutsideRoomVector = normalDir.Negate();
+                            testPoint1 = testPoint2;
+                        }
+                        if (revitRoom2 != null)
+                        {
+                            // do nothing.
+                        }
+
                     }
-                    if (revitRoom2 != null)
-                    {
-                        // do nothing.
-                    }
-                   
+                    if (opposite != null) break;
                 }
 
 

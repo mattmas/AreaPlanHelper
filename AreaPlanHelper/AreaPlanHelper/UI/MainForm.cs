@@ -16,6 +16,8 @@ namespace AreaShooter.UI
         private Controller _controller;
         private Config _config = Config.GetDefaults();
         private IList<RoomObject> _rooms;
+        private IList<DocName> _docsWithRooms = new List<DocName>();
+        private List<DocName> _docsToProcess = new List<DocName>();
 
         private IList<Config> _allConfigs = new List<Config>();
 
@@ -34,6 +36,9 @@ namespace AreaShooter.UI
             List<DocName> docNames = new List<DocName>();
             var docs = Controller.GetLinksWithRooms(_currentDoc);
             foreach (var doc in docs) docNames.Add(new DocName() { Doc = doc, Name = doc.Title, IsCurrent = false });
+
+            foreach (var doc in docNames) _docsWithRooms.Add(doc);
+
             if (Controller.HasRooms(_currentDoc)) docNames.Insert(0, new DocName() { Doc = _currentDoc, Name = _currentDoc.Title, IsCurrent = true });
 
             if (docNames.Count==0)
@@ -71,6 +76,10 @@ namespace AreaShooter.UI
             cbParameter.Items.AddRange(Controller.GetRoomTextParams(docName.Doc).ToArray());
 
             cbParameter.SelectedIndex = 0;
+
+            _docsToProcess.Clear();
+            var archDoc = cbModel.SelectedItem as DocName;
+            if (archDoc != null) _docsToProcess.Add(archDoc);
         }
 
         private void btnCancel_Click(object sender, EventArgs e)
@@ -81,7 +90,7 @@ namespace AreaShooter.UI
 
         private void btnNext_Click(object sender, EventArgs e)
         {
-            if (cbModel.SelectedItem==null)
+            if ((cbModel.SelectedItem==null) && (_docsToProcess.Count==0))
             {
                 MessageBox.Show("Please select a model!");
                 return;
@@ -107,9 +116,11 @@ namespace AreaShooter.UI
         {
             try
             {
-                
-                var archDoc = cbModel.SelectedItem as DocName;
-                _controller = new Controller(archDoc.Doc, _currentDoc, cbParameter.SelectedItem.ToString(), _config );
+
+                List<Autodesk.Revit.DB.Document> docs = new List<Autodesk.Revit.DB.Document>();
+                foreach (var doc in _docsToProcess) docs.Add(doc.Doc);
+
+                _controller = new Controller(docs, _currentDoc, cbParameter.SelectedItem.ToString(), _config );
 
                 Autodesk.Revit.DB.Parameter p = _currentDoc.ActiveView.get_Parameter(Autodesk.Revit.DB.BuiltInParameter.VIEW_PHASE);
                 if (p == null) throw new ApplicationException("No view phase info?");
@@ -117,17 +128,20 @@ namespace AreaShooter.UI
 
                 _rooms = _controller.RetrieveRooms(_currentDoc.ActiveView.GenLevel.Name, phaseName);
 
-                if (archDoc.Name != _currentDoc.Title)
+                // if this is only the current model, we can do more.
+
+                if (docs[0].Title == _currentDoc.Title)
+                {
+                    int openCount = Controller.CountOpenSpots(_currentDoc, _currentDoc.ActiveView.GenLevel.Name, phaseName);
+                    linkOpenSpots.Text = "NOTE: There are " + openCount + " open areas in your room model that do not have Room elements. PLEASE REVIEW!";
+                    linkOpenSpots.Visible = (openCount > 0);
+                }
+                else
                 {
                     linkOpenSpots.Text = "NOTE: please ensure that all possible rooms are created, including vertical penetration.";
                     linkOpenSpots.Visible = true;
                 }
-                else
-                {
-                    int openCount = Controller.CountOpenSpots(archDoc.Doc, _currentDoc.ActiveView.GenLevel.Name, phaseName);
-                    linkOpenSpots.Text = "NOTE: There are " + openCount + " open areas in your room model that do not have Room elements. PLEASE REVIEW!";
-                    linkOpenSpots.Visible = (openCount > 0);
-                }
+               
 
                 IList<RoomObjectSummary> summaries = RoomObjectSummary.Summarize(_rooms, _config);
                 dataGridView1.DataSource = null;
@@ -164,8 +178,8 @@ namespace AreaShooter.UI
         {
             try
             {
-                var archDoc = cbModel.SelectedItem as DocName;
-                _controller.Create(archDoc.Doc, _rooms, _currentDoc.ActiveView.GenLevel);
+                //var archDoc = cbModel.SelectedItem as DocName;
+                _controller.Create(_docsToProcess[0].Doc, _rooms, _currentDoc.ActiveView.GenLevel);
                 this.DialogResult = DialogResult.OK;
                 this.Close();
             }
@@ -202,6 +216,32 @@ namespace AreaShooter.UI
                 _config = form.Configuration;
                 cbConfigs.Items.Insert(0, _config);
                 cbConfigs.SelectedIndex = 0;
+            }
+        }
+
+        private void btnMulti_Click(object sender, EventArgs e)
+        {
+            DocName main = new DocName() { Doc = _currentDoc, IsCurrent = true, Name = _currentDoc.Title };
+            AreaPlanHelper.UI.MultiSelModels multi = new AreaPlanHelper.UI.MultiSelModels(main, _docsWithRooms);
+            cbModel.Enabled = false;  // can no longer select dropdown.
+
+            if (multi.ShowDialog(this) == DialogResult.OK)
+            {
+                _docsToProcess.Clear();
+                if (multi.Selected.Count == 1)
+                {
+                    cbModel.SelectedItem = multi.Selected[0];
+                    _docsToProcess.Add(multi.Selected[0]);
+                }
+                if (multi.Selected.Count > 1)
+                {
+                    cbModel.Items.Clear();
+                    cbModel.DataSource = null;
+                    cbModel.DisplayMember = "";
+                    cbModel.Items.Add("(multiple selected)");
+                    _docsToProcess.AddRange(multi.Selected);
+                }
+                
             }
         }
     }
