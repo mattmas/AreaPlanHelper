@@ -17,6 +17,8 @@ namespace AreaShooter.UI
         private Config _config = Config.GetDefaults();
         private IList<RoomObject> _rooms;
 
+        private IList<Config> _allConfigs = new List<Config>();
+
         public MainForm(Autodesk.Revit.DB.Document current)
         {
             InitializeComponent();
@@ -41,6 +43,24 @@ namespace AreaShooter.UI
             }
             cbModel.Items.AddRange(docNames.ToArray());
             cbModel.SelectedIndex = 0;
+
+            configRender();
+        }
+
+        private void configRender()
+        {
+            try
+            {
+               _allConfigs = Config.LoadAll(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location));
+                cbConfigs.Items.Clear();
+                if (_allConfigs.Count == 0) _allConfigs.Add(Config.GetDefaults());
+                cbConfigs.Items.AddRange(_allConfigs.ToArray());
+                cbConfigs.SelectedIndex = 0;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error reading configuration files: " + ex.Message);
+            }
         }
 
         private void onModelChange(object sender, EventArgs e)
@@ -144,6 +164,29 @@ namespace AreaShooter.UI
                 td.MainContent = ex.GetType().Name + ": " + ex.Message;
                 td.ExpandedContent = "Developer Info: " + Environment.NewLine + ex.StackTrace;
                 td.Show();
+            }
+        }
+
+        private void btnPriorities_Click(object sender, EventArgs e)
+        {
+            AreaPlanHelper.UI.RoomTypeForm form = new AreaPlanHelper.UI.RoomTypeForm(_config);
+            if (form.ShowDialog(this) == DialogResult.OK)
+            {
+                configRender();
+            }
+        }
+
+        private void btnLoad_Click(object sender, EventArgs e)
+        {
+            _config = cbConfigs.SelectedItem as Config;
+            if (_config == null) _config = Config.GetDefaults();
+
+            AreaPlanHelper.UI.RoomTypeForm form = new AreaPlanHelper.UI.RoomTypeForm(_config);
+            if (form.ShowDialog(this) == DialogResult.OK)
+            {
+                _config = form.Configuration;
+                cbConfigs.Items.Insert(0, _config);
+                cbConfigs.SelectedIndex = 0;
             }
         }
     }

@@ -34,7 +34,6 @@
             this.label3 = new System.Windows.Forms.Label();
             this.btnCancel = new System.Windows.Forms.Button();
             this.btnNext = new System.Windows.Forms.Button();
-            this.btnPriorities = new System.Windows.Forms.Button();
             this.cbParameter = new System.Windows.Forms.ComboBox();
             this.label2 = new System.Windows.Forms.Label();
             this.cbModel = new System.Windows.Forms.ComboBox();
@@ -50,6 +49,9 @@
             this.colCount = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colConfig = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.cbConfigs = new System.Windows.Forms.ComboBox();
+            this.label5 = new System.Windows.Forms.Label();
+            this.btnEdit = new System.Windows.Forms.Button();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
@@ -64,15 +66,17 @@
             this.tabControl1.Location = new System.Drawing.Point(0, 0);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(480, 333);
+            this.tabControl1.Size = new System.Drawing.Size(480, 363);
             this.tabControl1.TabIndex = 0;
             // 
             // tabPage1
             // 
+            this.tabPage1.Controls.Add(this.btnEdit);
+            this.tabPage1.Controls.Add(this.cbConfigs);
+            this.tabPage1.Controls.Add(this.label5);
             this.tabPage1.Controls.Add(this.label3);
             this.tabPage1.Controls.Add(this.btnCancel);
             this.tabPage1.Controls.Add(this.btnNext);
-            this.tabPage1.Controls.Add(this.btnPriorities);
             this.tabPage1.Controls.Add(this.cbParameter);
             this.tabPage1.Controls.Add(this.label2);
             this.tabPage1.Controls.Add(this.cbModel);
@@ -80,7 +84,7 @@
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(472, 307);
+            this.tabPage1.Size = new System.Drawing.Size(472, 337);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "tabPage1";
             this.tabPage1.UseVisualStyleBackColor = true;
@@ -98,7 +102,7 @@
             // btnCancel
             // 
             this.btnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnCancel.Location = new System.Drawing.Point(285, 246);
+            this.btnCancel.Location = new System.Drawing.Point(285, 276);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(75, 23);
             this.btnCancel.TabIndex = 6;
@@ -109,23 +113,13 @@
             // btnNext
             // 
             this.btnNext.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnNext.Location = new System.Drawing.Point(382, 246);
+            this.btnNext.Location = new System.Drawing.Point(382, 276);
             this.btnNext.Name = "btnNext";
             this.btnNext.Size = new System.Drawing.Size(75, 23);
             this.btnNext.TabIndex = 5;
             this.btnNext.Text = "&Next";
             this.btnNext.UseVisualStyleBackColor = true;
             this.btnNext.Click += new System.EventHandler(this.btnNext_Click);
-            // 
-            // btnPriorities
-            // 
-            this.btnPriorities.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnPriorities.Location = new System.Drawing.Point(27, 211);
-            this.btnPriorities.Name = "btnPriorities";
-            this.btnPriorities.Size = new System.Drawing.Size(135, 28);
-            this.btnPriorities.TabIndex = 4;
-            this.btnPriorities.Text = "Room Type Priorities";
-            this.btnPriorities.UseVisualStyleBackColor = true;
             // 
             // cbParameter
             // 
@@ -279,11 +273,43 @@
             this.colConfig.Name = "colConfig";
             this.colConfig.ReadOnly = true;
             // 
+            // cbConfigs
+            // 
+            this.cbConfigs.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.cbConfigs.DisplayMember = "Name";
+            this.cbConfigs.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbConfigs.FormattingEnabled = true;
+            this.cbConfigs.Location = new System.Drawing.Point(27, 235);
+            this.cbConfigs.Name = "cbConfigs";
+            this.cbConfigs.Size = new System.Drawing.Size(285, 21);
+            this.cbConfigs.TabIndex = 9;
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(27, 209);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(135, 13);
+            this.label5.TabIndex = 8;
+            this.label5.Text = "Room Types Configuration:";
+            // 
+            // btnEdit
+            // 
+            this.btnEdit.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnEdit.Location = new System.Drawing.Point(331, 233);
+            this.btnEdit.Name = "btnEdit";
+            this.btnEdit.Size = new System.Drawing.Size(75, 23);
+            this.btnEdit.TabIndex = 10;
+            this.btnEdit.Text = "Edit";
+            this.btnEdit.UseVisualStyleBackColor = true;
+            this.btnEdit.Click += new System.EventHandler(this.btnLoad_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(480, 333);
+            this.ClientSize = new System.Drawing.Size(480, 363);
             this.Controls.Add(this.tabControl1);
             this.Name = "MainForm";
             this.Text = "Area Plan Helper <version> by BeyondAEC 2018 Team";
@@ -304,7 +330,6 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Button btnCancel;
         private System.Windows.Forms.Button btnNext;
-        private System.Windows.Forms.Button btnPriorities;
         private System.Windows.Forms.ComboBox cbParameter;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.ComboBox cbModel;
@@ -320,5 +345,8 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn colType;
         private System.Windows.Forms.DataGridViewTextBoxColumn colCount;
         private System.Windows.Forms.DataGridViewTextBoxColumn colConfig;
+        private System.Windows.Forms.ComboBox cbConfigs;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Button btnEdit;
     }
 }

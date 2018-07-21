@@ -41,6 +41,7 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -64,10 +65,19 @@
     <Compile Include="UI\MainForm.designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="UI\RoomTypeForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\RoomTypeForm.Designer.cs">
+      <DependentUpon>RoomTypeForm.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="UI\MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\RoomTypeForm.resx">
+      <DependentUpon>RoomTypeForm.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
