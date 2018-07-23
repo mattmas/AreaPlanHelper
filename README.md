@@ -1,7 +1,7 @@
 # AreaPlanHelper
 A Revit addin to help you create areas from rooms that respect your BOMA or other similar rules.
 
-Developed at the BeyondAEC Hackathon 2019 (in 23 hours!) by Team AreaShooters:
+Developed at the BeyondAEC Hackathon 2018 (in 23 hours!) by Team AreaShooters:
 - Chris Mungenast, Elkus Manfredi
 - Jess Purcell, Shepley Bulfinch
 - Matt Mason, IMAGINiT
