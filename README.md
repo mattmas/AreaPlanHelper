@@ -15,5 +15,5 @@ The tool enables you to configure your room type standards, and the "weights" of
 - Corridor handling
 - and more.
 
-The addin is pre-built in the addin folder (an MSI, which supports Revit 2018
+The addin is pre-built in the addin folder (an MSI, which supports Revit 2017, 2018 and 2019)
 
