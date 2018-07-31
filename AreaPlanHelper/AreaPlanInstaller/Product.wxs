@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
-  <Product Id="*" Name="AreaPlanHelper" Language="1033" Version="1.0.0.0" Manufacturer="Team AreaShooter" UpgradeCode="b5d9255d-3d2d-447b-9bac-25647032d9c2">
+  <Product Id="*" Name="AreaPlanHelper" Language="1033" Version="1.0.1.0" Manufacturer="Team AreaShooter" UpgradeCode="b5d9255d-3d2d-447b-9bac-25647032d9c2">
     <Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
 
     <MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />

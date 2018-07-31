@@ -48,7 +48,11 @@ namespace AreaShooter
             {
                 Document d = e.GetLinkDocument();
 
-                if (HasRooms(d)) linkDocs.Add(d);
+                // might have some unloaded links...
+                if (d != null)
+                {
+                    if (HasRooms(d)) linkDocs.Add(d);
+                }
             }
 
             return linkDocs;

@@ -31,6 +31,7 @@
             this.components = new System.ComponentModel.Container();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.btnMulti = new System.Windows.Forms.Button();
             this.btnEdit = new System.Windows.Forms.Button();
             this.cbConfigs = new System.Windows.Forms.ComboBox();
             this.label5 = new System.Windows.Forms.Label();
@@ -52,7 +53,6 @@
             this.colCount = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colConfig = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.btnMulti = new System.Windows.Forms.Button();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
@@ -91,6 +91,17 @@
             this.tabPage1.Text = "tabPage1";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
+            // btnMulti
+            // 
+            this.btnMulti.Location = new System.Drawing.Point(330, 109);
+            this.btnMulti.Name = "btnMulti";
+            this.btnMulti.Size = new System.Drawing.Size(33, 21);
+            this.btnMulti.TabIndex = 11;
+            this.btnMulti.Text = "...";
+            this.toolTip1.SetToolTip(this.btnMulti, "Select rooms from multiple linked models.");
+            this.btnMulti.UseVisualStyleBackColor = true;
+            this.btnMulti.Click += new System.EventHandler(this.btnMulti_Click);
+            // 
             // btnEdit
             // 
             this.btnEdit.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
@@ -99,6 +110,7 @@
             this.btnEdit.Size = new System.Drawing.Size(75, 23);
             this.btnEdit.TabIndex = 10;
             this.btnEdit.Text = "Edit";
+            this.toolTip1.SetToolTip(this.btnEdit, "Edit the currently selected rule scheme.");
             this.btnEdit.UseVisualStyleBackColor = true;
             this.btnEdit.Click += new System.EventHandler(this.btnLoad_Click);
             // 
@@ -113,6 +125,7 @@
             this.cbConfigs.Name = "cbConfigs";
             this.cbConfigs.Size = new System.Drawing.Size(288, 21);
             this.cbConfigs.TabIndex = 9;
+            this.toolTip1.SetToolTip(this.cbConfigs, "A configuration file that defines the area-related rule scheme.");
             // 
             // label5
             // 
@@ -165,6 +178,7 @@
             this.cbParameter.Name = "cbParameter";
             this.cbParameter.Size = new System.Drawing.Size(288, 21);
             this.cbParameter.TabIndex = 3;
+            this.toolTip1.SetToolTip(this.cbParameter, "The room parameter that defines the type of area to create.");
             // 
             // label2
             // 
@@ -186,6 +200,7 @@
             this.cbModel.Name = "cbModel";
             this.cbModel.Size = new System.Drawing.Size(288, 21);
             this.cbModel.TabIndex = 1;
+            this.toolTip1.SetToolTip(this.cbModel, "The model which contains rooms that should be processed.");
             this.cbModel.SelectedIndexChanged += new System.EventHandler(this.onModelChange);
             // 
             // label1
@@ -306,17 +321,6 @@
             this.colConfig.HeaderText = "Is Configured?";
             this.colConfig.Name = "colConfig";
             this.colConfig.ReadOnly = true;
-            // 
-            // btnMulti
-            // 
-            this.btnMulti.Location = new System.Drawing.Point(330, 109);
-            this.btnMulti.Name = "btnMulti";
-            this.btnMulti.Size = new System.Drawing.Size(33, 21);
-            this.btnMulti.TabIndex = 11;
-            this.btnMulti.Text = "...";
-            this.toolTip1.SetToolTip(this.btnMulti, "Select rooms from multiple linked models.");
-            this.btnMulti.UseVisualStyleBackColor = true;
-            this.btnMulti.Click += new System.EventHandler(this.btnMulti_Click);
             // 
             // MainForm
             // 

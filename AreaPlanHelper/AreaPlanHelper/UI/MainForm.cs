@@ -73,6 +73,11 @@ namespace AreaShooter.UI
             cbParameter.Items.Clear();
             var docName = cbModel.SelectedItem as DocName;
 
+            if (cbModel.SelectedItem is String)
+            {
+                docName = _docsToProcess.First();
+            }
+
             cbParameter.Items.AddRange(Controller.GetRoomTextParams(docName.Doc).ToArray());
 
             cbParameter.SelectedIndex = 0;
@@ -239,7 +244,9 @@ namespace AreaShooter.UI
                     cbModel.DataSource = null;
                     cbModel.DisplayMember = "";
                     cbModel.Items.Add("(multiple selected)");
+                    
                     _docsToProcess.AddRange(multi.Selected);
+                    cbModel.SelectedIndex = 0; // trigger.
                 }
                 
             }
