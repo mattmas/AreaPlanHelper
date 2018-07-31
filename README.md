@@ -1,7 +1,7 @@
 # AreaPlanHelper
 A Revit addin to help you create areas from rooms that respect your BOMA or other similar rules.
 
-Developed at the BeyondAEC Hackathon 2019 by Team AreaShooters:
+Developed at the BeyondAEC Hackathon 2018 (in 23 hours!) by Team AreaShooters:
 - Chris Mungenast, Elkus Manfredi
 - Jess Purcell, Shepley Bulfinch
 - Matt Mason, IMAGINiT
@@ -15,5 +15,10 @@ The tool enables you to configure your room type standards, and the "weights" of
 - Corridor handling
 - and more.
 
-The addin is pre-built in the addin folder (an MSI, which supports Revit 2018
+The addin is pre-built in the addin folder (an MSI, which supports Revit 2017, 2018 and 2019)
+https://github.com/mattmas/AreaPlanHelper/tree/master/Addin
 
+Beyond the hackathon version, we have a slightly enhanced version that will enable you to pick multiple linked models (such as core and fitout) to pull the rooms from at the same time. We'd love to hear your feedback and suggestions on the Issues page above.
+
+Video Available here:
+https://youtu.be/vsXFZWRsbWs
